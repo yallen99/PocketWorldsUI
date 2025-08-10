@@ -1,0 +1,13 @@
+# Ignore all files by default, but scan all directories.
+*
+!*/
+
+# Do not ignore git files in the root of the repo.
+!/.git*
+
+# Do not ignore source, config and plugins dirs.
+!/Source/**
+!PocketWorldsUI.uproject
+!/Plugins/PocketWorlds/Source/**
+!Plugins/PockerWorlds/PocketWorlds.uplugin
+
