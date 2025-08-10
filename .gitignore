@@ -2,12 +2,14 @@
 *
 !*/
 
-# Do not ignore git files in the root of the repo.
+# Do not ignore git files in the root of the repo or this gitignore
 !/.git*
+!.gitignore
 
 # Do not ignore source, config and plugins dirs.
 !/Source/**
 !PocketWorldsUI.uproject
+!/config/**
 !/Plugins/PocketWorlds/Source/**
 !Plugins/PockerWorlds/PocketWorlds.uplugin
 
