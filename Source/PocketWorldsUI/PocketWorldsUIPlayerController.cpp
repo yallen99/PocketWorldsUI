@@ -12,11 +12,11 @@ void APocketWorldsUIPlayerController::BeginPlay()
 	Super::BeginPlay();
 	
 	// spawn the UI widget and add it to the viewport
-	VehicleUI = CreateWidget<UPocketWorldsUIUI>(this, VehicleUIClass);
+	/*VehicleUI = CreateWidget<UPocketWorldsUIUI>(this, VehicleUIClass);
 
 	check(VehicleUI);
 
-	VehicleUI->AddToViewport();
+	VehicleUI->AddToViewport();*/
 }
 
 void APocketWorldsUIPlayerController::SetupInputComponent()
