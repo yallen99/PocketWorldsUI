@@ -24,8 +24,16 @@ public:
 	}
 
 	static const TSoftClassPtr<UUILayoutWidget>& GetUILayoutWidget() { return Get()->UILayout; }
+	static const TSoftObjectPtr<UInputMappingContext>& GetUIBaseMappingContext() { return Get()->UIBaseInputMappingContext; }
+	static uint8 GetUIMappingContextPriority() { return Get()->BaseMappingContextPriority; }
 
 private:
+	UPROPERTY(Config, EditDefaultsOnly, Category = "Core UI Settings|Input")
+	TSoftObjectPtr<UInputMappingContext> UIBaseInputMappingContext;
+
+	UPROPERTY(Config, EditDefaultsOnly, Category = "Core UI Settings|Input", meta=(Tooltip = "Priority for the IMC UI Base actions. This is usually higher than the gameplay inputs"))
+	uint8 BaseMappingContextPriority = 10;
+
 	UPROPERTY(Config, EditDefaultsOnly, Category = "Core UI Settings", meta=(Tooltip = "Layout widget containing stacks to which we can push layers"))
 	TSoftClassPtr<UUILayoutWidget> UILayout = nullptr;
 };

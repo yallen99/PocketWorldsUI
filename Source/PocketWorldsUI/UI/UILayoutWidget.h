@@ -24,8 +24,15 @@ public:
 
 protected:
 	virtual void NativeConstruct() override;
+	virtual void NativeDestruct() override;
 
 private:
+	void AddBaseUIInputMappingContext();
+	void RemoveBaseUIInputMappingContext();
+
 	UPROPERTY(meta=(BindWidget))
 	TObjectPtr<UCommonActivatableWidgetStack> MenuStack = nullptr;
+
+	UPROPERTY(Transient)
+	TObjectPtr<UInputMappingContext> BaseUIMappingContext = nullptr;
 };
