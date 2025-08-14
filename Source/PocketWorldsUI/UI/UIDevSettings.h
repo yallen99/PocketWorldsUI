@@ -6,6 +6,7 @@
 #include "Engine/DeveloperSettings.h"
 #include "UIDevSettings.generated.h"
 
+class UInventoryItemsData;
 class UInputMappingContext;
 /**
  * Developer settings class that allows us to expose static UI properties to the Project Settings in editor
@@ -27,6 +28,8 @@ public:
 	static const TSoftObjectPtr<UInputMappingContext>& GetUIBaseMappingContext() { return Get()->UIBaseInputMappingContext; }
 	static uint8 GetUIMappingContextPriority() { return Get()->BaseMappingContextPriority; }
 
+	static const TSoftObjectPtr<UInventoryItemsData>& GetInventoryData() { return Get()->InventorySourceData; }
+
 private:
 	UPROPERTY(Config, EditDefaultsOnly, Category = "Core UI Settings|Input")
 	TSoftObjectPtr<UInputMappingContext> UIBaseInputMappingContext;
@@ -36,4 +39,7 @@ private:
 
 	UPROPERTY(Config, EditDefaultsOnly, Category = "Core UI Settings", meta=(Tooltip = "Layout widget containing stacks to which we can push layers"))
 	TSoftClassPtr<UUILayoutWidget> UILayout = nullptr;
+
+	UPROPERTY(Config, EditDefaultsOnly, Category = "Inventory Settings", meta=(Tooltip = "Layout widget containing stacks to which we can push layers"))
+	TSoftObjectPtr<UInventoryItemsData> InventorySourceData = nullptr;
 };

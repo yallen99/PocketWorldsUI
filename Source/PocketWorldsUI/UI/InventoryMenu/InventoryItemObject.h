@@ -34,6 +34,7 @@ class POCKETWORLDSUI_API UInventoryItemObject : public UObject
 {
 	GENERATED_BODY()
 
+public:
 	UPROPERTY()
 	FInventoryItemData ItemData;
 };
