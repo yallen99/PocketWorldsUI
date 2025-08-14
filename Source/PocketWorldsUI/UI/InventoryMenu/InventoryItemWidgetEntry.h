@@ -19,6 +19,7 @@ class POCKETWORLDSUI_API UInventoryItemWidgetEntry : public UCommonButtonBase, p
 	GENERATED_BODY()
 
 public:
+	virtual void NativeOnListItemObjectSet(UObject* ListItemObject) override;
 	void SetItemData(const FText& ItemName, const TSoftObjectPtr<UTexture2D>& Icon);
 
 private:

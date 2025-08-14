@@ -5,6 +5,16 @@
 
 #include "CommonLazyImage.h"
 #include "CommonTextBlock.h"
+#include "InventoryItemObject.h"
+
+void UInventoryItemWidgetEntry::NativeOnListItemObjectSet(UObject* ListItemObject)
+{
+	IUserObjectListEntry::NativeOnListItemObjectSet(ListItemObject);
+	if (const UInventoryItemObject* InventoryItem = Cast<UInventoryItemObject>(ListItemObject))
+	{
+		SetItemData(InventoryItem->ItemData.ItemName, InventoryItem->ItemData.ItemIcon);
+	}
+}
 
 void UInventoryItemWidgetEntry::SetItemData(const FText& ItemName, const TSoftObjectPtr<UTexture2D>& Icon)
 {

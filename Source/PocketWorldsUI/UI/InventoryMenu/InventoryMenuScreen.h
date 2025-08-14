@@ -6,6 +6,14 @@
 #include "CommonActivatableWidget.h"
 #include "InventoryMenuScreen.generated.h"
 
+UENUM()
+enum class EScreenInputMode: uint8
+{
+	GameAndMenu,
+	Game,
+	Menu
+};
+
 class UCommonLazyImage;
 class UCommonTileView;
 
@@ -17,6 +25,7 @@ class POCKETWORLDSUI_API UInventoryMenuScreen : public UCommonActivatableWidget
 protected:
 	virtual void NativeOnActivated() override;
 	virtual void NativeOnDeactivated() override;
+	virtual TOptional<FUIInputConfig> GetDesiredInputConfig() const override;
 
 private:
 	void SetItemsInGrid();
@@ -29,4 +38,10 @@ private:
 
 	UPROPERTY(meta=(BindWidget))
 	TObjectPtr<UCommonLazyImage> ItemPreviewImage = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, Category = Input)
+	EScreenInputMode InputConfig = EScreenInputMode::Game;
+
+	UPROPERTY(EditDefaultsOnly, Category = Input)
+	EMouseCaptureMode GameMouseCaptureMode = EMouseCaptureMode::CapturePermanently;
 };
