@@ -16,6 +16,7 @@ enum class EScreenInputMode: uint8
 
 class UCommonLazyImage;
 class UCommonTileView;
+class UMaterialInterface;
 
 UCLASS(Abstract)
 class POCKETWORLDSUI_API UInventoryMenuScreen : public UCommonActivatableWidget
@@ -26,10 +27,10 @@ protected:
 	virtual void NativeOnActivated() override;
 	virtual void NativeOnDeactivated() override;
 	virtual TOptional<FUIInputConfig> GetDesiredInputConfig() const override;
-
+	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 private:
 	void SetItemsInGrid();
-	void UpdatePreview();
+	void InitializeRenderTargetMaterial();
 
 	void OnGridItemSelectionChanged(UObject* SelectedItem);
 

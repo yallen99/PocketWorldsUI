@@ -2,10 +2,16 @@
 
 
 #include "PocketWorldsUIPlayerController.h"
+#include "Player/InventoryComponent.h"
 #include "PocketWorldsUIPawn.h"
 #include "PocketWorldsUIUI.h"
 #include "EnhancedInputSubsystems.h"
 #include "ChaosWheeledVehicleMovementComponent.h"
+
+APocketWorldsUIPlayerController::APocketWorldsUIPlayerController()
+{
+	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>("InventoryComponent");
+}
 
 void APocketWorldsUIPlayerController::BeginPlay()
 {

@@ -3,11 +3,18 @@
 
 #include "InventoryMenuScreen.h"
 
+#include "CommonLazyImage.h"
 #include "CommonTileView.h"
 #include "InventoryItemObject.h"
+#include "PocketCapture.h"
+#include "PocketLevelInstance.h"
 #include "Data/InventoryItemsData.h"
+#include "Engine/TextureRenderTarget2D.h"
+#include "PocketWorldsUI/PocketWorldsUIPlayerController.h"
+#include "PocketWorldsUI/Player/InventoryComponent.h"
 #include "PocketWorldsUI/UI/UIDevSettings.h"
 #include "PocketWorldsUI/UI/UIManagerSubsystem.h"
+#include "PocketWorldsUI/UI/InventoryPocketRender/ExtendedPocketCaptureSubsystem.h"
 
 void UInventoryMenuScreen::NativeOnActivated()
 {
@@ -49,6 +56,15 @@ TOptional<FUIInputConfig> UInventoryMenuScreen::GetDesiredInputConfig() const
 	}
 }
 
+void UInventoryMenuScreen::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
+{
+	Super::NativeTick(MyGeometry, InDeltaTime);
+	/*UExtendedPocketCaptureSubsystem* PocketCaptureSubsystem = GetWorld()->GetSubsystem<UExtendedPocketCaptureSubsystem>();
+	UExtendedPocketCapture* PocketCapture = PocketCaptureSubsystem->GetRendererForId("Inventory").Get();
+	PocketCapture->CaptureDiffuse();
+	PocketCapture->CaptureAlphaMask();*/
+}
+
 void UInventoryMenuScreen::SetItemsInGrid()
 {
 	const TSoftObjectPtr<UInventoryItemsData>& SoftInventoryTablePtr = UUIDevSettings::GetInventoryData();
@@ -67,10 +83,27 @@ void UInventoryMenuScreen::SetItemsInGrid()
 	{
 		InventoryGrid->SetListItems(Items);
 	}
+
+	// todo - this would have to be updated when the grid selection changes. For now, set it here
+	InitializeRenderTargetMaterial();
 }
 
-void UInventoryMenuScreen::UpdatePreview()
+void UInventoryMenuScreen::InitializeRenderTargetMaterial()
 {
+	UExtendedPocketCapture* PocketCapture = nullptr;
+	UExtendedPocketCaptureSubsystem* PocketCaptureSubsystem = GetWorld()->GetSubsystem<UExtendedPocketCaptureSubsystem>();
+	PocketCapture = PocketCaptureSubsystem->GetRendererForId("Inventory").Get();
+	if (IsValid(ItemPreviewImage) && IsValid(PocketCapture))
+	{
+		UMaterialInstanceDynamic* RenderMaterialInst = ItemPreviewImage->GetDynamicMaterial();
+		if (IsValid(RenderMaterialInst))
+		{
+			PocketCapture->CaptureDiffuse();
+			PocketCapture->CaptureAlphaMask();
+			RenderMaterialInst->SetTextureParameterValue(TEXT("Diffuse"), PocketCapture->GetOrCreateDiffuseRenderTarget());
+			RenderMaterialInst->SetTextureParameterValue(TEXT("AlphaMask"), PocketCapture->GetOrCreateAlphaMaskRenderTarget());
+		}
+	}
 }
 
 void UInventoryMenuScreen::OnGridItemSelectionChanged(UObject* SelectedItem)

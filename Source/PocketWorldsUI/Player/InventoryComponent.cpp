@@ -4,12 +4,15 @@
 #include "InventoryComponent.h"
 
 #include "EnhancedInputSubsystems.h"
+#include "PocketLevelInstance.h"
+#include "PocketLevelSystem.h"
 #include "Engine/AssetManager.h"
 #include "Engine/StreamableManager.h"
 #include "PocketWorldsUI/UI/UIDevSettings.h"
 #include "PocketWorldsUI/UI/UIManagerSubsystem.h"
 #include "PocketWorldsUI/UI/InventoryMenu/Data/InventoryItemsData.h"
 #include "PocketWorldsUI/UI/InventoryMenu/InventoryMenuScreen.h"
+#include "PocketWorldsUI/UI/InventoryPocketRender/ExtendedPocketCaptureSubsystem.h"
 
 UInventoryComponent::UInventoryComponent()
 {
@@ -21,11 +24,23 @@ void UInventoryComponent::BeginPlay()
 	Super::BeginPlay();
 	AttachInventoryMappingContext();
 	PopulateStaticInventory();
+	SpawnInventoryPreviewLevel();
+}
+
+void UInventoryComponent::OpenUIInventoryMenu(UPocketLevelInstance* PocketLevelInstance) const
+{
+	UUIManagerSubsystem::OpenMenu(this, InventoryMenuSubclass);
 }
 
 void UInventoryComponent::OpenUIInventory()
 {
-	UUIManagerSubsystem::OpenMenu(this, InventoryMenuSubclass);
+	if (IsValid(InventoryLevel))
+	{
+		// Stream in the level
+		InventoryLevel->StreamIn();
+		// When the level is ready, open the screen
+		InventoryLevel->AddReadyCallback(FPocketLevelInstanceEvent::FDelegate::CreateUObject(this, &ThisClass::OpenUIInventoryMenu));
+	}
 }
 
 void UInventoryComponent::OnInventoryAssetLoaded()
@@ -71,6 +86,18 @@ void UInventoryComponent::AttachInventoryMappingContext()
 	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(FirstPlayerController->GetLocalPlayer()))
 	{
 		Subsystem->AddMappingContext(InventoryActions, 0);
+	}
+}
+
+void UInventoryComponent::SpawnInventoryPreviewLevel()
+{
+	if (const UWorld* World = GetWorld())
+	{
+		if (UPocketLevelSubsystem* PocketLevelSubsystem = World->GetSubsystem<UPocketLevelSubsystem>())
+		{
+			InventoryLevel = PocketLevelSubsystem->GetOrCreatePocketLevelFor(World->GetFirstLocalPlayerFromController(), PocketLevelDefinition, PocketLevelSpawnLocation);
+			InventoryLevel->StreamOut();		// temporarily disable/stream out the level until we need it.
+		}
 	}
 }
 
