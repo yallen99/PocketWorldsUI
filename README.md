@@ -1,8 +1,9 @@
 # PocketWorldsUI
 <h1> Overview </h1>
 This project aims to demonstrate how to use the Pocket Worlds plugin from Epic Games (used in the sample project Lyra) to create an inventory with 3D previewable items. Most of the work is done in C++ to be able to visualise it on GitHub, but the project can be entirely done in blueprints.
-<h2> DISCLAIMER </h2>
-All assets used in the making of this project are provided by Epic Games (Templates, plugins, sample models) or created by me (UI flourishes).
+> [!NOTE]
+> This project was based on the example provided by Josh - https://github.com/JoshLmao/UE5PocketWorlds.
+> All assets used in the making of this project are provided by Epic Games (Templates, plugins, sample models) or created by me (UI flourishes).
 <h2> What is Pocket Worlds? </h2>
 Pocket Worlds is a plugin that can be independently copied from the Lyra sample project. Currently (2025), the plugin is NOT publicly available to enable directly from Unreal Engine. The plugin allows us to stream additional level(s) in the current level, and project one or multiple objects from the streamed level onto a Render Target texture. Using this texture, we can then create a material, which can subsequently be used in UI or other systems to visualise the captured object.
 
