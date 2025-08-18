@@ -5,10 +5,8 @@
 #include "CoreMinimal.h"
 #include "PocketCapture.h"
 #include "Components/ActorComponent.h"
-#include "PocketWorldsUI/UI/InventoryPocketRender/ExtendedPocketCapture.h"
 #include "InventoryComponent.generated.h"
 
-class UExtendedPocketCapture;
 class UPocketCapture;
 class UPocketLevelInstance;
 class UPocketLevel;
@@ -25,8 +23,6 @@ class POCKETWORLDSUI_API UInventoryComponent : public UActorComponent
 public:
 	UInventoryComponent();
 
-	// todo - for the simplicity sake, we will reference this component directly from the widget to get the ref to the inventory level
-	UPocketCapture* GetInventoryPocketCapture() const { return PocketCapturePtr; }
 protected:
 	virtual void BeginPlay() override;
 
@@ -51,9 +47,6 @@ private:
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Inventory|Pocket World")
 	FVector3d PocketLevelSpawnLocation = FVector3d::Zero();
-
-	UPROPERTY(Transient)
-	TObjectPtr<UExtendedPocketCapture> PocketCapturePtr = nullptr;
 
 	/// Array of items that are retrieved from the static inventory data asset
 	UPROPERTY(Transient)

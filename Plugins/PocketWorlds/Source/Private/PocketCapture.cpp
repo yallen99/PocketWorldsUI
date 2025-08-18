@@ -120,6 +120,11 @@ UTextureRenderTarget2D* UPocketCapture::GetOrCreateEffectsRenderTarget()
 	return EffectsRT;
 }
 
+const FGameplayTag& UPocketCapture::GetCaptureId() const
+{
+	return CaptureId;
+}
+
 void UPocketCapture::SetCaptureTarget(AActor* InCaptureTarget)
 {
 	CaptureTargetPtr = InCaptureTarget;

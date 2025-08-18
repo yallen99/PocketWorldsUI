@@ -2,10 +2,12 @@
 
 #pragma once
 
+#include "GameplayTagContainer.h"
 #include "GameFramework/Actor.h"
 
 #include "PocketCapture.generated.h"
 
+struct FGameplayTag;
 enum ESceneCaptureSource : int;
 
 class UMaterialInterface;
@@ -42,6 +44,9 @@ public:
 	UTextureRenderTarget2D* GetOrCreateEffectsRenderTarget();
 
 	UFUNCTION(BlueprintCallable)
+	const FGameplayTag& GetCaptureId() const;
+
+	UFUNCTION(BlueprintCallable)
 	void SetCaptureTarget(AActor* InCaptureTarget);
 
 	UFUNCTION(BlueprintCallable)
@@ -71,47 +76,46 @@ protected:
 
 	bool CaptureScene(UTextureRenderTarget2D* InRenderTarget, const TArray<AActor*>& InCaptureActors, ESceneCaptureSource CaptureSource, UMaterialInterface* OverrideMaterial);
 
-protected:
 	TArray<UPrimitiveComponent*> GatherPrimitivesForCapture(const TArray<AActor*>& InCaptureActors) const;
 	
 	UPocketCaptureSubsystem* GetThumbnailSystem() const;
-
-protected:
-
-	UPROPERTY(EditDefaultsOnly)
+	
+	UPROPERTY(EditDefaultsOnly, Category= "Materials")
 	TObjectPtr<UMaterialInterface> AlphaMaskMaterial;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category= "Materials")
 	TObjectPtr<UMaterialInterface> EffectMaskMaterial;
 
-protected:
 	UPROPERTY(Transient)
 	TObjectPtr<UWorld> PrivateWorld;
 
 	UPROPERTY(Transient)
 	int32 RendererIndex = INDEX_NONE;
 
-	UPROPERTY(VisibleAnywhere)
-	int32 SurfaceWidth = 1;
-
-	UPROPERTY(VisibleAnywhere)
-	int32 SurfaceHeight = 1;
-
-	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<UTextureRenderTarget2D> DiffuseRT;
-
-	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<UTextureRenderTarget2D> AlphaMaskRT;
-
-	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<UTextureRenderTarget2D> EffectsRT;
-
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(Transient)
 	TObjectPtr<USceneCaptureComponent2D> CaptureComponent;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(EditDefaultsOnly, meta=(Categories=PocketCapture, ToolTip="Render Target Id. Must be a tag that starts with `PocketCapture.`"))
+	FGameplayTag CaptureId = FGameplayTag::EmptyTag;
+
+	UPROPERTY(EditDefaultsOnly, Category="Render Target Properties")
+	int32 SurfaceWidth = 1;
+
+	UPROPERTY(EditDefaultsOnly, Category="Render Target Properties")
+	int32 SurfaceHeight = 1;
+
+	UPROPERTY(EditDefaultsOnly, Category="Render Target Properties")
+	TObjectPtr<UTextureRenderTarget2D> DiffuseRT;
+
+	UPROPERTY(EditDefaultsOnly, Category="Render Target Properties")
+	TObjectPtr<UTextureRenderTarget2D> AlphaMaskRT;
+
+	UPROPERTY(EditDefaultsOnly, Category="Render Target Properties")
+	TObjectPtr<UTextureRenderTarget2D> EffectsRT;
+
+	UPROPERTY(EditDefaultsOnly, Category="Captures")
 	TWeakObjectPtr<AActor> CaptureTargetPtr;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(EditDefaultsOnly, Category="Captures")
 	TArray<TWeakObjectPtr<AActor>> AlphaMaskActorPtrs;
 };

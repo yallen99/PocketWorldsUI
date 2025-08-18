@@ -7,14 +7,11 @@
 #include "CommonTileView.h"
 #include "InventoryItemObject.h"
 #include "PocketCapture.h"
-#include "PocketLevelInstance.h"
+#include "PocketCaptureSubsystem.h"
 #include "Data/InventoryItemsData.h"
 #include "Engine/TextureRenderTarget2D.h"
-#include "PocketWorldsUI/PocketWorldsUIPlayerController.h"
-#include "PocketWorldsUI/Player/InventoryComponent.h"
 #include "PocketWorldsUI/UI/UIDevSettings.h"
 #include "PocketWorldsUI/UI/UIManagerSubsystem.h"
-#include "PocketWorldsUI/UI/InventoryPocketRender/ExtendedPocketCaptureSubsystem.h"
 
 void UInventoryMenuScreen::NativeOnActivated()
 {
@@ -56,15 +53,6 @@ TOptional<FUIInputConfig> UInventoryMenuScreen::GetDesiredInputConfig() const
 	}
 }
 
-void UInventoryMenuScreen::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
-{
-	Super::NativeTick(MyGeometry, InDeltaTime);
-	/*UExtendedPocketCaptureSubsystem* PocketCaptureSubsystem = GetWorld()->GetSubsystem<UExtendedPocketCaptureSubsystem>();
-	UExtendedPocketCapture* PocketCapture = PocketCaptureSubsystem->GetRendererForId("Inventory").Get();
-	PocketCapture->CaptureDiffuse();
-	PocketCapture->CaptureAlphaMask();*/
-}
-
 void UInventoryMenuScreen::SetItemsInGrid()
 {
 	const TSoftObjectPtr<UInventoryItemsData>& SoftInventoryTablePtr = UUIDevSettings::GetInventoryData();
@@ -85,14 +73,13 @@ void UInventoryMenuScreen::SetItemsInGrid()
 	}
 
 	// todo - this would have to be updated when the grid selection changes. For now, set it here
-	InitializeRenderTargetMaterial();
+	SetCapturePreview();
 }
 
-void UInventoryMenuScreen::InitializeRenderTargetMaterial()
+void UInventoryMenuScreen::SetCapturePreview()
 {
-	UExtendedPocketCapture* PocketCapture = nullptr;
-	UExtendedPocketCaptureSubsystem* PocketCaptureSubsystem = GetWorld()->GetSubsystem<UExtendedPocketCaptureSubsystem>();
-	PocketCapture = PocketCaptureSubsystem->GetRendererForId("Inventory").Get();
+	UPocketCaptureSubsystem* PocketCaptureSubsystem = GetWorld()->GetSubsystem<UPocketCaptureSubsystem>();
+	UPocketCapture* PocketCapture = PocketCaptureSubsystem->GetRendererForId(PocketCaptureId).Get();
 	if (IsValid(ItemPreviewImage) && IsValid(PocketCapture))
 	{
 		UMaterialInstanceDynamic* RenderMaterialInst = ItemPreviewImage->GetDynamicMaterial();

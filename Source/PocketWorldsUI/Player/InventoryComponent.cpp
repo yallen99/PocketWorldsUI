@@ -12,7 +12,6 @@
 #include "PocketWorldsUI/UI/UIManagerSubsystem.h"
 #include "PocketWorldsUI/UI/InventoryMenu/Data/InventoryItemsData.h"
 #include "PocketWorldsUI/UI/InventoryMenu/InventoryMenuScreen.h"
-#include "PocketWorldsUI/UI/InventoryPocketRender/ExtendedPocketCaptureSubsystem.h"
 
 UInventoryComponent::UInventoryComponent()
 {
@@ -27,11 +26,6 @@ void UInventoryComponent::BeginPlay()
 	SpawnInventoryPreviewLevel();
 }
 
-void UInventoryComponent::OpenUIInventoryMenu(UPocketLevelInstance* PocketLevelInstance) const
-{
-	UUIManagerSubsystem::OpenMenu(this, InventoryMenuSubclass);
-}
-
 void UInventoryComponent::OpenUIInventory()
 {
 	if (IsValid(InventoryLevel))
@@ -41,6 +35,11 @@ void UInventoryComponent::OpenUIInventory()
 		// When the level is ready, open the screen
 		InventoryLevel->AddReadyCallback(FPocketLevelInstanceEvent::FDelegate::CreateUObject(this, &ThisClass::OpenUIInventoryMenu));
 	}
+}
+
+void UInventoryComponent::OpenUIInventoryMenu(UPocketLevelInstance* PocketLevelInstance) const
+{
+	UUIManagerSubsystem::OpenMenu(this, InventoryMenuSubclass);
 }
 
 void UInventoryComponent::OnInventoryAssetLoaded()

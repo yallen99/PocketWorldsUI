@@ -3,8 +3,6 @@
 
 #include "InventoryItemActor.h"
 
-#include "ExtendedPocketCapture.h"
-#include "ExtendedPocketCaptureSubsystem.h"
 #include "Camera/CameraComponent.h"
 #include "PocketCapture.h"
 #include "PocketCaptureSubsystem.h"
@@ -29,12 +27,7 @@ void AInventoryItemActor::BeginPlay()
 {
 	Super::BeginPlay();
 	UPocketCaptureSubsystem* PocketCaptureSubsystem = GetWorld()->GetSubsystem<UPocketCaptureSubsystem>();
-	UExtendedPocketCaptureSubsystem* ExtPocketCaptureSubsystem = GetWorld()->GetSubsystem<UExtendedPocketCaptureSubsystem>();
 	PocketCapturePtr = PocketCaptureSubsystem->CreateThumbnailRenderer(PocketCaptureClass);
 	PocketCapturePtr->SetRenderTargetSize(RenderTargetSize.X, RenderTargetSize.Y);
 	PocketCapturePtr->SetCaptureTarget(this);
-	if (UExtendedPocketCapture* ExtPocketCapture = Cast<UExtendedPocketCapture>(PocketCapturePtr))
-	{
-		ExtPocketCaptureSubsystem->TrackNewCapture(ExtPocketCapture);
-	}
 }

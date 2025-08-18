@@ -4,7 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "CommonActivatableWidget.h"
+#include "GameplayTagContainer.h"
 #include "InventoryMenuScreen.generated.h"
+
+struct FGameplayTag;
 
 UENUM()
 enum class EScreenInputMode: uint8
@@ -27,10 +30,10 @@ protected:
 	virtual void NativeOnActivated() override;
 	virtual void NativeOnDeactivated() override;
 	virtual TOptional<FUIInputConfig> GetDesiredInputConfig() const override;
-	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
+
 private:
 	void SetItemsInGrid();
-	void InitializeRenderTargetMaterial();
+	void SetCapturePreview();
 
 	void OnGridItemSelectionChanged(UObject* SelectedItem);
 
@@ -39,6 +42,9 @@ private:
 
 	UPROPERTY(meta=(BindWidget))
 	TObjectPtr<UCommonLazyImage> ItemPreviewImage = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Pocket Capture")
+	FGameplayTag PocketCaptureId = FGameplayTag::EmptyTag;
 
 	UPROPERTY(EditDefaultsOnly, Category = Input)
 	EScreenInputMode InputConfig = EScreenInputMode::Game;
