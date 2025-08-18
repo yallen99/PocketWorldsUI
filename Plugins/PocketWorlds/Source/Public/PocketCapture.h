@@ -95,6 +95,12 @@ protected:
 	UPROPERTY(Transient)
 	TObjectPtr<USceneCaptureComponent2D> CaptureComponent;
 
+	UPROPERTY(Transient)
+	TWeakObjectPtr<AActor> CaptureTargetPtr;
+
+	UPROPERTY(Transient)
+	TArray<TWeakObjectPtr<AActor>> AlphaMaskActorPtrs;
+
 	UPROPERTY(EditDefaultsOnly, meta=(Categories=PocketCapture, ToolTip="Render Target Id. Must be a tag that starts with `PocketCapture.`"))
 	FGameplayTag CaptureId = FGameplayTag::EmptyTag;
 
@@ -112,10 +118,4 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category="Render Target Properties")
 	TObjectPtr<UTextureRenderTarget2D> EffectsRT;
-
-	UPROPERTY(EditDefaultsOnly, Category="Captures")
-	TWeakObjectPtr<AActor> CaptureTargetPtr;
-
-	UPROPERTY(EditDefaultsOnly, Category="Captures")
-	TArray<TWeakObjectPtr<AActor>> AlphaMaskActorPtrs;
 };
