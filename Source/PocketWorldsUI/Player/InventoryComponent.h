@@ -10,7 +10,7 @@
 class UPocketCapture;
 class UPocketLevelInstance;
 class UPocketLevel;
-class UInventoryMenuScreen;
+class UInventoryMenu;
 class UInputMappingContext;
 class UInventoryItemObject;
 
@@ -40,7 +40,7 @@ private:
 	TObjectPtr<UInputMappingContext> InventoryActions = nullptr;
 
 	UPROPERTY(EditAnywhere, Category="Inventory")
-	TSubclassOf<UInventoryMenuScreen> InventoryMenuSubclass = nullptr;
+	TSubclassOf<UInventoryMenu> InventoryMenuSubclass = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Inventory|Pocket World")
 	TObjectPtr<UPocketLevel> PocketLevelDefinition = nullptr;

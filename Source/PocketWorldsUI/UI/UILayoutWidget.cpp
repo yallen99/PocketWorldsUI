@@ -3,6 +3,7 @@
 
 #include "UILayoutWidget.h"
 
+#include "BaseActivatableMenu.h"
 #include "CommonActivatableWidget.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputMappingContext.h"
@@ -23,6 +24,18 @@ void UUILayoutWidget::PopWidgetFromStack(UCommonActivatableWidget& WidgetToRemov
 	{
 		MenuStack->RemoveWidget(WidgetToRemove);
 	}
+}
+
+UBaseActivatableMenu* UUILayoutWidget::GetTopOfTheStack()
+{
+	if (IsValid(MenuStack))
+	{
+		if (UCommonActivatableWidget* ActiveWidget = MenuStack->GetActiveWidget())
+		{
+			return Cast<UBaseActivatableMenu>(ActiveWidget);
+		}
+	}
+	return nullptr;
 }
 
 void UUILayoutWidget::NativeConstruct()

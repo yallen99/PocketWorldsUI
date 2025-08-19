@@ -9,6 +9,7 @@ public class PocketWorldsUI : ModuleRules
 		PrivateDependencyModuleNames.AddRange(new string[]
 		{
 			"CommonUI",
+			"CommonInput",
 			"GameplayTags"
 		});
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;

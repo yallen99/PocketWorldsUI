@@ -11,7 +11,7 @@
 #include "PocketWorldsUI/UI/UIDevSettings.h"
 #include "PocketWorldsUI/UI/UIManagerSubsystem.h"
 #include "PocketWorldsUI/UI/InventoryMenu/Data/InventoryItemsData.h"
-#include "PocketWorldsUI/UI/InventoryMenu/InventoryMenuScreen.h"
+#include "PocketWorldsUI/UI/InventoryMenu/InventoryMenu.h"
 
 UInventoryComponent::UInventoryComponent()
 {

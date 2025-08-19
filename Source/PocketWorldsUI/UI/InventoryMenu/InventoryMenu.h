@@ -3,33 +3,25 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "CommonActivatableWidget.h"
 #include "GameplayTagContainer.h"
-#include "InventoryMenuScreen.generated.h"
+#include "PocketWorldsUI/UI/BaseActivatableMenu.h"
+#include "InventoryMenu.generated.h"
 
 struct FGameplayTag;
 
-UENUM()
-enum class EScreenInputMode: uint8
-{
-	GameAndMenu,
-	Game,
-	Menu
-};
 
 class UCommonLazyImage;
 class UCommonTileView;
 class UMaterialInterface;
 
 UCLASS(Abstract)
-class POCKETWORLDSUI_API UInventoryMenuScreen : public UCommonActivatableWidget
+class POCKETWORLDSUI_API UInventoryMenu : public UBaseActivatableMenu
 {
 	GENERATED_BODY()
 
 protected:
 	virtual void NativeOnActivated() override;
 	virtual void NativeOnDeactivated() override;
-	virtual TOptional<FUIInputConfig> GetDesiredInputConfig() const override;
 
 private:
 	void SetItemsInGrid();
@@ -45,10 +37,4 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Pocket Capture")
 	FGameplayTag PocketCaptureId = FGameplayTag::EmptyTag;
-
-	UPROPERTY(EditDefaultsOnly, Category = Input)
-	EScreenInputMode InputConfig = EScreenInputMode::Game;
-
-	UPROPERTY(EditDefaultsOnly, Category = Input)
-	EMouseCaptureMode GameMouseCaptureMode = EMouseCaptureMode::CapturePermanently;
 };

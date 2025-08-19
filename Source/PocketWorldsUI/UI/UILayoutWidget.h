@@ -3,11 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "BaseActivatableMenu.h"
 #include "CommonActivatableWidget.h"
 #include "CommonUserWidget.h"
 
 #include "UILayoutWidget.generated.h"
 
+class UBaseActivatableMenu;
 class UCommonActivatableWidgetStack;
 
 /**
@@ -21,6 +23,9 @@ class POCKETWORLDSUI_API UUILayoutWidget : public UCommonUserWidget
 public:
 	void PushWidgetToStack(const TSubclassOf<UCommonActivatableWidget>& WidgetToAdd);
 	void PopWidgetFromStack(UCommonActivatableWidget& WidgetToRemove);
+
+	// Get the currently active widget on this stack, or nullptr if the stack is empty
+	UBaseActivatableMenu* GetTopOfTheStack();
 
 protected:
 	virtual void NativeConstruct() override;
