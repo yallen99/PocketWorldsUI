@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "PocketWorldsUIPlayerController.generated.h"
 
+class UInventoryComponent;
 class UInputMappingContext;
 class APocketWorldsUIPawn;
 class UPocketWorldsUIUI;
@@ -45,18 +46,22 @@ protected:
 	/** Pointer to the UI widget */
 	TObjectPtr<UPocketWorldsUIUI> VehicleUI;
 
-	
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<USceneComponent> RootSceneComponent = nullptr;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	TObjectPtr<UInventoryComponent> InventoryComponent = nullptr;
 
 	// Begin Actor interface
 protected:
-
+	APocketWorldsUIPlayerController();
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
 
 public:
-
+	UInventoryComponent* GetInventoryComponent() const { return InventoryComponent; };
 	virtual void Tick(float Delta) override;
-
+	
 	// End Actor interface
 
 	// Begin PlayerController interface

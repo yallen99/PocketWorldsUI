@@ -86,7 +86,7 @@ UTextureRenderTarget2D* UPocketCapture::GetOrCreateDiffuseRenderTarget()
 	if (DiffuseRT == nullptr)
 	{
 		DiffuseRT = NewObject<UTextureRenderTarget2D>(this, TEXT("ThumbnailRenderer_Diffuse"));
-		DiffuseRT->RenderTargetFormat = RTF_RGBA8;
+		DiffuseRT->RenderTargetFormat = RTF_RGBA32f;
 		DiffuseRT->InitAutoFormat(SurfaceWidth, SurfaceHeight);
 		DiffuseRT->UpdateResourceImmediate(true);
 	}
@@ -99,7 +99,7 @@ UTextureRenderTarget2D* UPocketCapture::GetOrCreateAlphaMaskRenderTarget()
 	if (AlphaMaskRT == nullptr)
 	{
 		AlphaMaskRT = NewObject<UTextureRenderTarget2D>(this, TEXT("ThumbnailRenderer_AlphaMask"));
-		AlphaMaskRT->RenderTargetFormat = RTF_R8;
+		AlphaMaskRT->RenderTargetFormat = RTF_RGBA32f;
 		AlphaMaskRT->InitAutoFormat(SurfaceWidth, SurfaceHeight);
 		AlphaMaskRT->UpdateResourceImmediate(true);
 	}
@@ -118,6 +118,11 @@ UTextureRenderTarget2D* UPocketCapture::GetOrCreateEffectsRenderTarget()
 	}
 
 	return EffectsRT;
+}
+
+const FGameplayTag& UPocketCapture::GetCaptureId() const
+{
+	return CaptureId;
 }
 
 void UPocketCapture::SetCaptureTarget(AActor* InCaptureTarget)

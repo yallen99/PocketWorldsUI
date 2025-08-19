@@ -79,6 +79,19 @@ void UPocketCaptureSubsystem::StreamThisFrame(TArray<UPrimitiveComponent*>& Prim
 	StreamNextFrame.Append(PrimitiveComponents);
 }
 
+TWeakObjectPtr<UPocketCapture> UPocketCaptureSubsystem::GetRendererForId(const FGameplayTag& RendererId)
+{
+	const TWeakObjectPtr<UPocketCapture>* FoundRenderer = ThumbnailRenderers.FindByPredicate([&RendererId] (const TWeakObjectPtr<UPocketCapture>& Other)
+	{
+		return Other->GetCaptureId() == RendererId;
+	});
+	if (FoundRenderer)
+	{
+		return *FoundRenderer;
+	}
+	return nullptr;
+}
+
 bool UPocketCaptureSubsystem::Tick(float DeltaTime)
 {
 	QUICK_SCOPE_CYCLE_COUNTER(STAT_URealTimeThumbnailSubsystem_Tick);

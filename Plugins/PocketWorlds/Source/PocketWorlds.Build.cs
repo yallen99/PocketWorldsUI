@@ -23,7 +23,7 @@ public class PocketWorlds : ModuleRules
 		PrivateDependencyModuleNames.AddRange(
 			new string[]
 			{
-				// ... add private dependencies that you statically link with here ...
+				"GameplayTags"
 			}
 		);
 	}

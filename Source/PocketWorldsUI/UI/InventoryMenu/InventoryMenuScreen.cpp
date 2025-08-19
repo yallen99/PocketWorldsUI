@@ -3,9 +3,13 @@
 
 #include "InventoryMenuScreen.h"
 
+#include "CommonLazyImage.h"
 #include "CommonTileView.h"
 #include "InventoryItemObject.h"
+#include "PocketCapture.h"
+#include "PocketCaptureSubsystem.h"
 #include "Data/InventoryItemsData.h"
+#include "Engine/TextureRenderTarget2D.h"
 #include "PocketWorldsUI/UI/UIDevSettings.h"
 #include "PocketWorldsUI/UI/UIManagerSubsystem.h"
 
@@ -67,10 +71,26 @@ void UInventoryMenuScreen::SetItemsInGrid()
 	{
 		InventoryGrid->SetListItems(Items);
 	}
+
+	// todo - this would have to be updated when the grid selection changes. For now, set it here
+	SetCapturePreview();
 }
 
-void UInventoryMenuScreen::UpdatePreview()
+void UInventoryMenuScreen::SetCapturePreview()
 {
+	UPocketCaptureSubsystem* PocketCaptureSubsystem = GetWorld()->GetSubsystem<UPocketCaptureSubsystem>();
+	UPocketCapture* PocketCapture = PocketCaptureSubsystem->GetRendererForId(PocketCaptureId).Get();
+	if (IsValid(ItemPreviewImage) && IsValid(PocketCapture))
+	{
+		UMaterialInstanceDynamic* RenderMaterialInst = ItemPreviewImage->GetDynamicMaterial();
+		if (IsValid(RenderMaterialInst))
+		{
+			PocketCapture->CaptureDiffuse();
+			PocketCapture->CaptureAlphaMask();
+			RenderMaterialInst->SetTextureParameterValue(TEXT("Diffuse"), PocketCapture->GetOrCreateDiffuseRenderTarget());
+			RenderMaterialInst->SetTextureParameterValue(TEXT("AlphaMask"), PocketCapture->GetOrCreateAlphaMaskRenderTarget());
+		}
+	}
 }
 
 void UInventoryMenuScreen::OnGridItemSelectionChanged(UObject* SelectedItem)

@@ -4,6 +4,8 @@
 #include "InventoryComponent.h"
 
 #include "EnhancedInputSubsystems.h"
+#include "PocketLevelInstance.h"
+#include "PocketLevelSystem.h"
 #include "Engine/AssetManager.h"
 #include "Engine/StreamableManager.h"
 #include "PocketWorldsUI/UI/UIDevSettings.h"
@@ -21,9 +23,21 @@ void UInventoryComponent::BeginPlay()
 	Super::BeginPlay();
 	AttachInventoryMappingContext();
 	PopulateStaticInventory();
+	SpawnInventoryPreviewLevel();
 }
 
 void UInventoryComponent::OpenUIInventory()
+{
+	if (IsValid(InventoryLevel))
+	{
+		// Stream in the level
+		InventoryLevel->StreamIn();
+		// When the level is ready, open the screen
+		InventoryLevel->AddReadyCallback(FPocketLevelInstanceEvent::FDelegate::CreateUObject(this, &ThisClass::OpenUIInventoryMenu));
+	}
+}
+
+void UInventoryComponent::OpenUIInventoryMenu(UPocketLevelInstance* PocketLevelInstance) const
 {
 	UUIManagerSubsystem::OpenMenu(this, InventoryMenuSubclass);
 }
@@ -71,6 +85,18 @@ void UInventoryComponent::AttachInventoryMappingContext()
 	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(FirstPlayerController->GetLocalPlayer()))
 	{
 		Subsystem->AddMappingContext(InventoryActions, 0);
+	}
+}
+
+void UInventoryComponent::SpawnInventoryPreviewLevel()
+{
+	if (const UWorld* World = GetWorld())
+	{
+		if (UPocketLevelSubsystem* PocketLevelSubsystem = World->GetSubsystem<UPocketLevelSubsystem>())
+		{
+			InventoryLevel = PocketLevelSubsystem->GetOrCreatePocketLevelFor(World->GetFirstLocalPlayerFromController(), PocketLevelDefinition, PocketLevelSpawnLocation);
+			InventoryLevel->StreamOut();		// temporarily disable/stream out the level until we need it.
+		}
 	}
 }
 

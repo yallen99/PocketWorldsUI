@@ -3,9 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "PocketCapture.h"
 #include "Components/ActorComponent.h"
 #include "InventoryComponent.generated.h"
 
+class UPocketCapture;
+class UPocketLevelInstance;
+class UPocketLevel;
 class UInventoryMenuScreen;
 class UInputMappingContext;
 class UInventoryItemObject;
@@ -29,6 +33,8 @@ private:
 	void OnInventoryAssetLoaded();
 	void PopulateStaticInventory();
 	void AttachInventoryMappingContext();
+	void SpawnInventoryPreviewLevel();
+	void OpenUIInventoryMenu(UPocketLevelInstance* PocketLevelInstance) const;
 
 	UPROPERTY(EditAnywhere, Category="Inventory")
 	TObjectPtr<UInputMappingContext> InventoryActions = nullptr;
@@ -36,7 +42,16 @@ private:
 	UPROPERTY(EditAnywhere, Category="Inventory")
 	TSubclassOf<UInventoryMenuScreen> InventoryMenuSubclass = nullptr;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Inventory|Pocket World")
+	TObjectPtr<UPocketLevel> PocketLevelDefinition = nullptr;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Inventory|Pocket World")
+	FVector3d PocketLevelSpawnLocation = FVector3d::Zero();
+
 	/// Array of items that are retrieved from the static inventory data asset
 	UPROPERTY(Transient)
 	TArray<TObjectPtr<UInventoryItemObject>> StaticInventory;
+
+	UPROPERTY(Transient)
+	TObjectPtr<UPocketLevelInstance> InventoryLevel = nullptr;
 };

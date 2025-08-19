@@ -7,6 +7,7 @@
 
 #include "PocketCaptureSubsystem.generated.h"
 
+struct FGameplayTag;
 template <typename T> class TSubclassOf;
 
 class FSubsystemCollectionBase;
@@ -35,6 +36,7 @@ public:
 	void DestroyThumbnailRenderer(UPocketCapture* ThumbnailRenderer);
 
 	void StreamThisFrame(TArray<UPrimitiveComponent*>& PrimitiveComponents);
+	TWeakObjectPtr<UPocketCapture> GetRendererForId(const FGameplayTag& RendererId);
 
 protected:
 	bool Tick(float DeltaTime);

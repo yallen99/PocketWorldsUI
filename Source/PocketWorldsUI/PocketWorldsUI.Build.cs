@@ -23,6 +23,7 @@ public class PocketWorldsUI : ModuleRules
 			"EnhancedInput",
 			"ChaosVehicles",
 			"PhysicsCore",
+			"PocketWorlds",		// Add the dependency to the plugin here
 			"SlateCore",
 			"Slate"
 		});
