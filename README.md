@@ -20,6 +20,7 @@ Below is a step-by-step explanation of how I created this example, because gatek
 <h2>Inventory UI & Inventory Component</h2>
 @todo
 <h2>Pocket Worlds RT</h2>
-@todo
+First Implementation PR >> https://github.com/yallen99/PocketWorldsUI/pull/2
+
 <h2>UI Navigation on the grid</h2>
 @todo
