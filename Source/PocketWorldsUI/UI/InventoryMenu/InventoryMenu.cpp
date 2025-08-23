@@ -10,8 +10,10 @@
 #include "PocketCaptureSubsystem.h"
 #include "Data/InventoryItemsData.h"
 #include "Engine/TextureRenderTarget2D.h"
+#include "GameFramework/GameplayMessageSubsystem.h"
 #include "PocketWorldsUI/UI/UIDevSettings.h"
 #include "PocketWorldsUI/UI/UIManagerSubsystem.h"
+#include "PocketWorldsUI/UI/UINativeGameplayTags.h"
 
 void UInventoryMenu::NativeOnActivated()
 {
@@ -40,9 +42,13 @@ void UInventoryMenu::NativeOnDeactivated()
 
 void UInventoryMenu::SetItemsInGrid()
 {
+	if (!IsValid(InventoryGrid))
+	{
+		return;
+	}
 	const TSoftObjectPtr<UInventoryItemsData>& SoftInventoryTablePtr = UUIDevSettings::GetInventoryData();
 	const UInventoryItemsData* LoadedStaticInventoryAsset = SoftInventoryTablePtr.LoadSynchronous();
-	TArray<UInventoryItemObject*> Items;
+	
 	if(IsValid(LoadedStaticInventoryAsset))
 	{
 		for (const TPair<FGameplayTag, FInventoryItemData>& Item : LoadedStaticInventoryAsset->ItemData)
@@ -52,12 +58,9 @@ void UInventoryMenu::SetItemsInGrid()
 			Items.Add(NewInventoryItem);
 		}
 	}
-	if (IsValid(InventoryGrid))
-	{
-		InventoryGrid->SetListItems(Items);
-	}
-
-	// todo - this would have to be updated when the grid selection changes. For now, set it here
+	
+	InventoryGrid->SetListItems(Items);
+	InventoryGrid->SetSelectedIndex(0);
 	SetCapturePreview();
 }
 
@@ -82,6 +85,9 @@ void UInventoryMenu::OnGridItemSelectionChanged(UObject* SelectedItem)
 {
 	if (UInventoryItemObject* InventoryItem = Cast<UInventoryItemObject>(SelectedItem))
 	{
-		// Do something with the item?
+		FGameplayTag& SelectedTag = InventoryItem->ItemData.ItemId;
+		UGameplayMessageSubsystem& MessageSubsystem = UGameplayMessageSubsystem::Get(this);
+		MessageSubsystem.BroadcastMessage(UI_Inventory_Events_OnItemSelectionChanged, SelectedTag);
+		SetCapturePreview();
 	}
 }

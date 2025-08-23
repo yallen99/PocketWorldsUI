@@ -14,6 +14,7 @@ class UInventoryMenu;
 class UInputMappingContext;
 class UInventoryItemObject;
 
+
 /// This component allows the local player to open the inventory
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class POCKETWORLDSUI_API UInventoryComponent : public UActorComponent

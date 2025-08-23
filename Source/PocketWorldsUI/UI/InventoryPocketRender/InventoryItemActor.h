@@ -3,8 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "GameFramework/Actor.h"
+#include "GameFramework/GameplayMessageSubsystem.h"
 #include "InventoryItemActor.generated.h"
+
+struct FGameplayTag;
 
 class UCameraComponent;
 class UPocketCapture;
@@ -25,6 +29,9 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
+	void SetActiveMeshForId(const FGameplayTag& MeshId);
+	void OnInventoryItemSelectionChanged(FGameplayTag Channel, const FGameplayTag& Payload);
+
 	UPROPERTY(EditAnywhere, Category="Camera Properties")
 	FVector CameraLocation = FVector::ZeroVector;
 
@@ -49,6 +56,14 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UCameraComponent> CameraComponent = nullptr;
 
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<USkeletalMeshComponent> PreviewableActorMeshComponent = nullptr;
+
 	UPROPERTY()
 	TWeakObjectPtr<UPocketCapture> PocketCapturePtr = nullptr;
+
+	UPROPERTY(EditAnywhere)
+	TMap<FGameplayTag, TObjectPtr<USkeletalMesh>> PreviwableActorMeshMap;
+
+	FGameplayMessageListenerHandle OnInventoryItemSelectionChangedHandle;
 };

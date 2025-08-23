@@ -7,6 +7,7 @@
 #include "PocketWorldsUI/UI/BaseActivatableMenu.h"
 #include "InventoryMenu.generated.h"
 
+class UInventoryItemObject;
 struct FGameplayTag;
 
 
@@ -22,7 +23,7 @@ class POCKETWORLDSUI_API UInventoryMenu : public UBaseActivatableMenu
 protected:
 	virtual void NativeOnActivated() override;
 	virtual void NativeOnDeactivated() override;
-
+	virtual TOptional<FUIInputConfig> GetDesiredInputConfig() const override;
 private:
 	void SetItemsInGrid();
 	void SetCapturePreview();
