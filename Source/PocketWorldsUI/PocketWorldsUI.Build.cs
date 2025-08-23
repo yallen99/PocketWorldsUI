@@ -20,6 +20,7 @@ public class PocketWorldsUI : ModuleRules
 			"CoreUObject",
 			"DeveloperSettings",
 			"Engine",
+			"GameplayMessageRuntime",
 			"InputCore",
 			"EnhancedInput",
 			"ChaosVehicles",
