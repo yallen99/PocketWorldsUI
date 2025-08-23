@@ -8,6 +8,7 @@
 #include "GameFramework/GameplayMessageSubsystem.h"
 #include "InventoryItemActor.generated.h"
 
+class UInventoryItemObject;
 struct FGameplayTag;
 
 class UCameraComponent;

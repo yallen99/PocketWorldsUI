@@ -23,7 +23,7 @@ class POCKETWORLDSUI_API UInventoryMenu : public UBaseActivatableMenu
 protected:
 	virtual void NativeOnActivated() override;
 	virtual void NativeOnDeactivated() override;
-	virtual TOptional<FUIInputConfig> GetDesiredInputConfig() const override;
+
 private:
 	void SetItemsInGrid();
 	void SetCapturePreview();
@@ -35,7 +35,10 @@ private:
 
 	UPROPERTY(meta=(BindWidget))
 	TObjectPtr<UCommonLazyImage> ItemPreviewImage = nullptr;
-
+	
+	UPROPERTY()
+	TArray<TObjectPtr<UInventoryItemObject>> Items;
+	
 	UPROPERTY(EditDefaultsOnly, Category = "Pocket Capture")
 	FGameplayTag PocketCaptureId = FGameplayTag::EmptyTag;
 };
