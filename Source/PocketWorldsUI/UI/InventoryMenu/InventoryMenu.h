@@ -7,6 +7,7 @@
 #include "PocketWorldsUI/UI/BaseActivatableMenu.h"
 #include "InventoryMenu.generated.h"
 
+class UInventoryItemObject;
 struct FGameplayTag;
 
 
@@ -34,7 +35,10 @@ private:
 
 	UPROPERTY(meta=(BindWidget))
 	TObjectPtr<UCommonLazyImage> ItemPreviewImage = nullptr;
-
+	
+	UPROPERTY()
+	TArray<TObjectPtr<UInventoryItemObject>> Items;
+	
 	UPROPERTY(EditDefaultsOnly, Category = "Pocket Capture")
 	FGameplayTag PocketCaptureId = FGameplayTag::EmptyTag;
 };
