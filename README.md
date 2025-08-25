@@ -42,7 +42,7 @@ To make it simple to add global properties to any menu, I added a base class, `U
 The PR below has the information on how to set up the most basic version of the Pocket Worlds with the UI:
 First Implementation PR >> https://github.com/yallen99/PocketWorldsUI/pull/2
 
-<b>How it works: the basics</b> \n
+<h3>How it works: the basics</h3>
 What the Pocket Worlds plugin provides is easily streaming additional levels into the curren world and capturing a set Actor onto a render target. 
 The flow is:
 1. The "Pocket" Level is created and streamed in
@@ -51,7 +51,7 @@ The flow is:
 
 With the Render Texture from the Pocket Capture object we can then create a (masked) material to display in the UI (or anywhere else).
 
-<b>What the plugin <i>didn't</i> provide </b> \n
+<h3>What the plugin <i>didn't</i> provide </h3>
 The good part about the Pocket Worlds is that it is managed by a World Subsystem which can be retrieved from anywhere. In the subsystem we have an array of the Pocket Captures created so far.
 <i>However</i>, the Pocket captures have no unique identifier, and the array is private, with no getter, in the subsystem.
 To be able to differentiate between different captures, I added:
