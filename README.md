@@ -29,7 +29,7 @@ The Layout Widget is Lyra's approach of Layer handling - it contains the activat
 Thus, the UI Manager creates an instance of the Layout Widget based on a template stored in the Default Settings (a bespoke developer class I created to hold onto all my default UI data). Once the Layout is added to the viewport, we can use the static functions `OpenMenu` & `CloseMenu` to open menus on the stack.
 
 The Layout Widget has an important role in <b>adding the global Input mapping context</b> for UI. My project uses Enahnced Input in the UI, hence any action I want to perform, including the default Back and Confirm actions from the Common UI configuration (if you are unsure what this is, check this [link]), have to be mapped into an IMC. 
-Whe the Layout widget is added to viewport (in its Construct) it grabs the Default UI Actions IMC from the Default Settings (again, a place for all my defaults) and adds it to the Local Player Enhanced Input Subsystem.
+When the Layout widget is added to viewport (in its Construct), it grabs the Default UI Actions IMC from the Default Settings (again, a place for all my defaults) and adds it to the Local Player Enhanced Input Subsystem.
 The Default actions IMC contains only my Default Confirm & Default Back actions, because I want to the other inventory menu actions to only be available when the menu is active, and not all the time.
 
 To make it simple to add global properties to any menu, I added a base class, `UBaseMenu` which extends from `UActivatableWidget` and would be the parent of any menu I want to add to the stacks.
@@ -38,7 +38,25 @@ To make it simple to add global properties to any menu, I added a base class, `U
 <h2>Inventory UI & Inventory Component</h2>
 @todo
 <h2>Pocket Worlds RT</h2>
+<h3> Shortcut to Code </h3>
+The PR below has the information on how to set up the most basic version of the Pocket Worlds with the UI:
 First Implementation PR >> https://github.com/yallen99/PocketWorldsUI/pull/2
+
+<b>How it works: the basics</b>
+What the Pocket Worlds plugin provides is easily streaming additional levels into the curren world and capturing a set Actor onto a render target. 
+The flow is:
+1. The "Pocket" Level is created and streamed in
+2. The Level contains an actor which we want to capture, which is passed to the Pocket Capture
+3. The Pocket Capture takes a "capture" / snapshot of this object (only!) and gives us back the Render Target Texture.
+
+With the Render Texture from the Pocket Capture object we can then create a (masked) material to display in the UI (or anywhere else).
+
+<b>What the plugin <i>didn't</i> provide </b>
+The good part about the Pocket Worlds is that it is managed by a World Subsystem which can be retrieved from anywhere. In the subsystem we have an array of the Pocket Captures created so far.
+<i>However</i>, the Pocket captures have no unique identifier, and the array is private, with no getter, in the subsystem.
+To be able to differentiate between different captures, I added:
+* A Gameplay Tag Id to the Pocket Capture object (similar to Josh's approach, who extended the class and made his own. I did think, however, this is a trivial, useful change, that deserves to exist in the plugin)
+* A getter by id in the subsystem so we can retrieve the exact capture that we want from the list
 
 <h2>UI Navigation on the grid</h2>
 @todo
