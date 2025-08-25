@@ -58,7 +58,9 @@ With the Render Texture from the Pocket Capture object we can then create a (mas
 The good part about the Pocket Worlds is that it is managed by a World Subsystem which can be retrieved from anywhere. In the subsystem we have an array of the Pocket Captures created so far.
 <i>However</i>, the Pocket captures have no unique identifier, and the array is private, with no getter, in the subsystem.
 To be able to differentiate between different captures, I added:
+
 * A Gameplay Tag Id to the Pocket Capture object (similar to Josh's approach, who extended the class and made his own. I did think, however, this is a trivial, useful change, that deserves to exist in the plugin)
+
 * A getter by id in the subsystem so we can retrieve the exact capture that we want from the list
 
 <h2>UI Navigation on the grid</h2>
