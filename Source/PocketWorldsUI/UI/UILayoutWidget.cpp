@@ -8,6 +8,8 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputMappingContext.h"
 #include "UIDevSettings.h"
+#include "Engine/AssetManager.h"
+#include "Engine/StreamableManager.h"
 #include "Input/CommonUIActionRouterBase.h"
 #include "Widgets/CommonActivatableWidgetContainer.h"
 
@@ -62,17 +64,10 @@ void UUILayoutWidget::ApplyLeafmostInputConfig(UCommonActivatableWidget* Current
 	}
 }
 
-void UUILayoutWidget::AddBaseUIInputMappingContext()
+void UUILayoutWidget::OnDefaultUIMappingContextLoaded()
 {
-	const TSoftObjectPtr<UInputMappingContext>& UIInputMappingContext = UUIDevSettings::GetUIBaseMappingContext();
+	BaseUIMappingContext = UUIDevSettings::GetUIBaseMappingContext().Get();
 	const uint8 UIInputMappingContextPriority = UUIDevSettings::GetUIMappingContextPriority();
-	if(UIInputMappingContext.IsNull())
-	{
-		return;
-	}
-
-	// todo - Not ideal to load it sync here, but for now it would do. We need those actions to do anything UI related
-	BaseUIMappingContext = UIInputMappingContext.LoadSynchronous();
 
 	if(!IsValid(BaseUIMappingContext))
 	{
@@ -82,6 +77,18 @@ void UUILayoutWidget::AddBaseUIInputMappingContext()
 	{
 		EnhancedInputSubsystem->AddMappingContext(BaseUIMappingContext, UIInputMappingContextPriority);
 	}
+}
+
+void UUILayoutWidget::AddBaseUIInputMappingContext()
+{
+	const TSoftObjectPtr<UInputMappingContext>& UIInputMappingContext = UUIDevSettings::GetUIBaseMappingContext();
+	if(UIInputMappingContext.IsNull())
+	{
+		return;
+	}
+	FStreamableManager& StreamableManager = UAssetManager::GetStreamableManager();
+	StreamableManager.RequestAsyncLoad(UIInputMappingContext.ToSoftObjectPath(),
+		FSimpleDelegate::CreateUObject(this, &ThisClass::OnDefaultUIMappingContextLoaded));
 }
 
 void UUILayoutWidget::RemoveBaseUIInputMappingContext()

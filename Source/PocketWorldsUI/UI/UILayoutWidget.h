@@ -28,6 +28,7 @@ protected:
 
 private:
 	void ApplyLeafmostInputConfig(UCommonActivatableWidget* CurrentWidget);
+	void OnDefaultUIMappingContextLoaded();
 	void AddBaseUIInputMappingContext();
 	void RemoveBaseUIInputMappingContext();
 
