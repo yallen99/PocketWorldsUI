@@ -49,10 +49,6 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Inventory|Pocket World")
 	FVector3d PocketLevelSpawnLocation = FVector3d::Zero();
 
-	/// Array of items that are retrieved from the static inventory data asset
-	UPROPERTY(Transient)
-	TArray<TObjectPtr<UInventoryItemObject>> StaticInventory;
-
 	UPROPERTY(Transient)
 	TObjectPtr<UPocketLevelInstance> InventoryLevel = nullptr;
 };

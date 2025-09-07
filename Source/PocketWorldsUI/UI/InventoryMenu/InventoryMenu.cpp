@@ -47,7 +47,8 @@ void UInventoryMenu::SetItemsInGrid()
 	}
 	const TSoftObjectPtr<UInventoryItemsData>& SoftInventoryTablePtr = UUIDevSettings::GetInventoryData();
 	const UInventoryItemsData* LoadedStaticInventoryAsset = SoftInventoryTablePtr.LoadSynchronous();
-	
+
+	Items.Empty();
 	if(IsValid(LoadedStaticInventoryAsset))
 	{
 		for (const TPair<FGameplayTag, FInventoryItemData>& Item : LoadedStaticInventoryAsset->ItemData)

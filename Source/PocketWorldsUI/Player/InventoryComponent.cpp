@@ -44,16 +44,8 @@ void UInventoryComponent::OpenUIInventoryMenu(UPocketLevelInstance* PocketLevelI
 
 void UInventoryComponent::OnInventoryAssetLoaded()
 {
-	const TSoftObjectPtr<UInventoryItemsData>& SoftInventoryTablePtr = UUIDevSettings::GetInventoryData();
-	const UInventoryItemsData* LoadedStaticInventoryAsset = SoftInventoryTablePtr.Get();
-	if(IsValid(LoadedStaticInventoryAsset))
-	{
-		for (const TPair<FGameplayTag, FInventoryItemData>& Item : LoadedStaticInventoryAsset->ItemData)
-		{
-			UInventoryItemObject* NewInventoryItem = NewObject<UInventoryItemObject>();
-			NewInventoryItem->ItemData = Item.Value;
-		}
-	}
+	// We don't need to do anything with the inventory here (not for now, or for this example)
+	// We only need the inventory asset to be added for UI display purposes.
 }
 
 void UInventoryComponent::PopulateStaticInventory()
