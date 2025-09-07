@@ -3,3 +3,4 @@
 #include "UINativeGameplayTags.h"
 
 UE_DEFINE_GAMEPLAY_TAG(UI_Inventory_Events_OnItemSelectionChanged, "UI.Inventory.Events.OnItemSelectionChanged")
+UE_DEFINE_GAMEPLAY_TAG(UI_Inventory_Events_OnItemEquipped, "UI.Inventory.Events.OnItemEquipped")

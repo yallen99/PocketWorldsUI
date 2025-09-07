@@ -3,6 +3,7 @@
 
 #include "InventoryMenu.h"
 
+#include "CommonButtonBase.h"
 #include "CommonLazyImage.h"
 #include "CommonTileView.h"
 #include "InventoryItemObject.h"
@@ -12,8 +13,25 @@
 #include "Engine/TextureRenderTarget2D.h"
 #include "GameFramework/GameplayMessageSubsystem.h"
 #include "PocketWorldsUI/UI/UIDevSettings.h"
-#include "PocketWorldsUI/UI/UIManagerSubsystem.h"
 #include "PocketWorldsUI/UI/UINativeGameplayTags.h"
+
+void UInventoryMenu::NativeConstruct()
+{
+	Super::NativeConstruct();
+	if (IsValid(EquipButton))
+	{
+		EquipButton->OnClicked().AddUObject(this, &ThisClass::EquipItem);
+	}
+}
+
+void UInventoryMenu::NativeDestruct()
+{
+	if (IsValid(EquipButton))
+	{
+		EquipButton->OnClicked().RemoveAll(this);
+	}
+	Super::NativeDestruct();
+}
 
 void UInventoryMenu::NativeOnActivated()
 {
@@ -90,4 +108,18 @@ void UInventoryMenu::OnGridItemSelectionChanged(UObject* SelectedItem)
 		MessageSubsystem.BroadcastMessage(UI_Inventory_Events_OnItemSelectionChanged, SelectedTag);
 		SetCapturePreview();
 	}
+}
+
+void UInventoryMenu::EquipItem()
+{
+	if (!IsValid(InventoryGrid))
+	{
+		return;
+	}
+	if (const UInventoryItemObject* SelectedItem = InventoryGrid->GetSelectedItem<UInventoryItemObject>())
+	{
+		UGameplayMessageSubsystem& MessageSubsystem = UGameplayMessageSubsystem::Get(this);
+		MessageSubsystem.BroadcastMessage(UI_Inventory_Events_OnItemEquipped, SelectedItem->ItemData.ItemId);
+	}
+	HandleBackAction();
 }

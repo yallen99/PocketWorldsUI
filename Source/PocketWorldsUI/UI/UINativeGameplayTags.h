@@ -6,3 +6,4 @@
 #include "NativeGameplayTags.h"
 
 UE_DECLARE_GAMEPLAY_TAG_EXTERN(UI_Inventory_Events_OnItemSelectionChanged);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(UI_Inventory_Events_OnItemEquipped);

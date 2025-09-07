@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "WheeledVehiclePawn.h"
 #include "PocketWorldsUIPawn.generated.h"
 
@@ -93,6 +94,7 @@ public:
 
 	// End Actor interface
 
+	void EquipNewMesh(USkeletalMesh* ItemMesh);
 protected:
 
 	/** Handles steering input */
@@ -125,6 +127,7 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent, Category="Vehicle")
 	void BrakeLights(bool bBraking);
 
+	virtual void BeginPlay() override;
 public:
 	/** Returns the front spring arm subobject */
 	FORCEINLINE USpringArmComponent* GetFrontSpringArm() const { return FrontSpringArm; }
@@ -136,4 +139,10 @@ public:
 	FORCEINLINE UCameraComponent* GetBackCamera() const { return BackCamera; }
 	/** Returns the cast Chaos Vehicle Movement subobject */
 	FORCEINLINE const TObjectPtr<UChaosWheeledVehicleMovementComponent>& GetChaosVehicleMovement() const { return ChaosVehicleMovement; }
+private:
+	void OnItemEquipped(FGameplayTag Channel, const FGameplayTag& ItemId);
+
+	UPROPERTY(EditAnywhere, Category="Inventory Items")
+	TMap<FGameplayTag, TObjectPtr<USkeletalMesh>> ItemsMeshMap;
 };
+

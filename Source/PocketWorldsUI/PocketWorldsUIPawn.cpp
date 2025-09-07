@@ -10,6 +10,8 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "ChaosWheeledVehicleMovementComponent.h"
+#include "GameFramework/GameplayMessageSubsystem.h"
+#include "UI/UINativeGameplayTags.h"
 
 #define LOCTEXT_NAMESPACE "VehiclePawn"
 
@@ -92,6 +94,23 @@ void APocketWorldsUIPawn::SetupPlayerInputComponent(class UInputComponent* Playe
 	}
 }
 
+void APocketWorldsUIPawn::BeginPlay()
+{
+	Super::BeginPlay();
+	UGameplayMessageSubsystem& MessageSubsystem = UGameplayMessageSubsystem::Get(this);
+	MessageSubsystem.RegisterListener(UI_Inventory_Events_OnItemEquipped, this, &ThisClass::OnItemEquipped);
+}
+
+void APocketWorldsUIPawn::OnItemEquipped(FGameplayTag Channel, const FGameplayTag& ItemId)
+{
+	/// Todo: I do not like the fact that 1) we duplicate this mesh map here and in InventoryItemActor
+	/// and 2) the meshaes are not soft ptrs.
+	if (USkeletalMesh* ItemMesh = ItemsMeshMap.FindRef(ItemId))
+	{
+		EquipNewMesh(ItemMesh);
+	}
+}
+
 void APocketWorldsUIPawn::Tick(float Delta)
 {
 	Super::Tick(Delta);
@@ -105,6 +124,15 @@ void APocketWorldsUIPawn::Tick(float Delta)
 	CameraYaw = FMath::FInterpTo(CameraYaw, 0.0f, Delta, 1.0f);
 
 	BackSpringArm->SetRelativeRotation(FRotator(0.0f, CameraYaw, 0.0f));
+}
+
+void APocketWorldsUIPawn::EquipNewMesh(USkeletalMesh* ItemMesh)
+{
+	USkeletalMeshComponent* MeshComponent = GetComponentByClass<USkeletalMeshComponent>();
+	if (MeshComponent)
+	{
+		MeshComponent->SetSkeletalMesh(ItemMesh);
+	}
 }
 
 void APocketWorldsUIPawn::Steering(const FInputActionValue& Value)
