@@ -17,7 +17,7 @@ class POCKETWORLDSUI_API UBaseActivatableMenu : public UCommonActivatableWidget
 
 public:
 	virtual TOptional<FUIInputConfig> GetDesiredInputConfig() const override;
-
+	virtual bool NativeOnHandleBackAction() override;
 private:
 	UPROPERTY(EditDefaultsOnly, Category = Input)
 	ECommonInputMode InputConfig = ECommonInputMode::Game;

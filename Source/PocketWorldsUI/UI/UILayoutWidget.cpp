@@ -8,6 +8,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputMappingContext.h"
 #include "UIDevSettings.h"
+#include "Input/CommonUIActionRouterBase.h"
 #include "Widgets/CommonActivatableWidgetContainer.h"
 
 void UUILayoutWidget::PushWidgetToStack(const TSubclassOf<UCommonActivatableWidget>& WidgetToAdd)
@@ -26,28 +27,39 @@ void UUILayoutWidget::PopWidgetFromStack(UCommonActivatableWidget& WidgetToRemov
 	}
 }
 
-UBaseActivatableMenu* UUILayoutWidget::GetTopOfTheStack()
-{
-	if (IsValid(MenuStack))
-	{
-		if (UCommonActivatableWidget* ActiveWidget = MenuStack->GetActiveWidget())
-		{
-			return Cast<UBaseActivatableMenu>(ActiveWidget);
-		}
-	}
-	return nullptr;
-}
-
 void UUILayoutWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 	AddBaseUIInputMappingContext();
+	if(IsValid(MenuStack))
+	{
+		MenuStack->OnDisplayedWidgetChanged().AddUObject(this, &ThisClass::ApplyLeafmostInputConfig);
+	}
 }
 
 void UUILayoutWidget::NativeDestruct()
 {
 	RemoveBaseUIInputMappingContext();
+	if(IsValid(MenuStack))
+	{
+		MenuStack->OnDisplayedWidgetChanged().RemoveAll(this);
+	}
 	Super::NativeDestruct();
+}
+
+void UUILayoutWidget::ApplyLeafmostInputConfig(UCommonActivatableWidget* CurrentWidget)
+{
+	UCommonUIActionRouterBase* ActionRouterBase = UCommonUIActionRouterBase::Get(*this);
+	if (const UBaseActivatableMenu* ActiveMenu = Cast<UBaseActivatableMenu>(CurrentWidget))
+	{
+		const FUIInputConfig& CurrentInputConfig = ActiveMenu->GetDesiredInputConfig().GetValue();
+		ActionRouterBase->SetActiveUIInputConfig(CurrentInputConfig);
+	}
+	else
+	{
+		const FUIInputConfig& CurrentInputConfig = FUIInputConfig(ECommonInputMode::Game, EMouseCaptureMode::CapturePermanently);
+		ActionRouterBase->SetActiveUIInputConfig(CurrentInputConfig);
+	}
 }
 
 void UUILayoutWidget::AddBaseUIInputMappingContext()

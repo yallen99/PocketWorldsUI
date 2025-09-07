@@ -3,6 +3,8 @@
 
 #include "BaseActivatableMenu.h"
 
+#include "UIManagerSubsystem.h"
+
 TOptional<FUIInputConfig> UBaseActivatableMenu::GetDesiredInputConfig() const
 {
 	switch (InputConfig)
@@ -15,4 +17,10 @@ TOptional<FUIInputConfig> UBaseActivatableMenu::GetDesiredInputConfig() const
 			return FUIInputConfig(ECommonInputMode::Menu, EMouseCaptureMode::NoCapture);
 		default: return Super::GetDesiredInputConfig();
 	}
+}
+
+bool UBaseActivatableMenu::NativeOnHandleBackAction()
+{
+	UUIManagerSubsystem::CloseMenu(this, *this);
+	return Super::NativeOnHandleBackAction();
 }

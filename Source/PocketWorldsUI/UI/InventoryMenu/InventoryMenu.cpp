@@ -36,7 +36,6 @@ void UInventoryMenu::NativeOnDeactivated()
 	{
 		InventoryGrid->OnItemSelectionChanged().RemoveAll(this);
 	}
-	UUIManagerSubsystem::CloseMenu(this, *this);
 	Super::NativeOnDeactivated();
 }
 
